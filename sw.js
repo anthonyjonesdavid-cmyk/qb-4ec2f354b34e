@@ -1,5 +1,5 @@
 // Quotebook app-shell cache: opens instantly from the Home Screen, then refreshes in the background.
-const SHELL = "qb-shell-v22";
+const SHELL = "qb-shell-v23";
 const DATA = "qb-data-v1";
 // "/" on lovable.app, "/<repo>/" on GitHub Pages.
 const BASE = new URL(self.registration.scope).pathname;
@@ -7,7 +7,7 @@ const BASE = new URL(self.registration.scope).pathname;
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => {
   e.waitUntil((async () => {
-    for (const k of await caches.keys()) if (k !== SHELL && k !== DATA) await caches.delete(k);
+    for (const k of await caches.keys()) if (k.startsWith("qb-") && k !== SHELL && k !== DATA) await caches.delete(k); // only this copy's caches
     await self.clients.claim();
   })());
 });
